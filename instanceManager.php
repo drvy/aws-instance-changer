@@ -1,6 +1,6 @@
 <?php
 
-namespace Brootkec\InstanceManager;
+namespace drvy\InstanceManager;
 
 use Exception;
 use PDO;
@@ -16,14 +16,18 @@ class InstanceManager
     private $queue = array();
 
 
+    /**
+     *
+     * Example:
+     *  var_dump($this->getAllJobs());
+     *  var_dump($this->getCurrentJobs());
+     *  var_dump($this->getInstanceType(''));
+     *  var_dump($this->getInstanceState(''));
+     *
+     * @return void
+     */
     public function __construct()
     {
-        //var_dump($this->getAllJobs());
-        //var_dump($this->getCurrentJobs());
-
-        //var_dump($this->getInstanceType(''));
-
-        var_dump($this->getInstanceState(''));
     }
 
 
@@ -32,6 +36,7 @@ class InstanceManager
         -------------------------------- */
 
     /**
+     * Connect to sqlite database
      *
      * @return bool
      */
@@ -45,7 +50,6 @@ class InstanceManager
             $this->db = new PDO('sqlite:' . $this->dbFile);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return true;
-
         } catch (Exception $error) {
             die($error->getMessage());
             return false;
@@ -54,6 +58,7 @@ class InstanceManager
 
 
     /**
+     * Parse the database results into an array for easy access.
      *
      * @param array $results
      * @return array
@@ -77,6 +82,7 @@ class InstanceManager
 
 
     /**
+     * Return all jobs from the database
      *
      * @return array
      */
@@ -97,6 +103,7 @@ class InstanceManager
 
 
     /**
+     * Get jobs expected to be executed by now.
      *
      * @return array
      */
@@ -115,7 +122,6 @@ class InstanceManager
             $result = $this->parseResults($result);
 
             return (is_array($result) ? $result : array());
-
         } catch (Exception $error) {
             die($error->getMessage());
             return array();
@@ -129,6 +135,7 @@ class InstanceManager
 
 
     /**
+     * Connect to AWS EC2.
      *
      * @return bool
      */
@@ -148,10 +155,7 @@ class InstanceManager
                 ]
             ]);
 
-
-            $this->ec2->modifyInstanceAttribute();
             return true;
-
         } catch (Exception $error) {
             die($error->getMessage());
             return false;
@@ -160,6 +164,7 @@ class InstanceManager
 
 
     /**
+     * Get the type of instance
      *
      * @param string $instanceID
      * @return string
@@ -179,6 +184,7 @@ class InstanceManager
 
 
     /**
+     * Get the instanceID, state and type
      *
      * @param string $instanceID
      * @return array
@@ -210,6 +216,7 @@ class InstanceManager
 
 
     /**
+     * Get the instance state
      *
      * @param string $instanceID
      * @return string
@@ -227,16 +234,32 @@ class InstanceManager
     }
 
 
+    /**
+     * Stop a currently running instance
+     *
+     * @return void
+     */
     private function stopInstance()
     {
     }
 
 
+    /**
+     * start a currently stoppted instance
+     *
+     * @return void
+     */
     private function startInstance()
     {
     }
 
 
+    /**
+     * Change the type of instance. Requires stoping and starting the instance
+     * in the process
+     *
+     * @return void
+     */
     private function changeInstanceType()
     {
     }
